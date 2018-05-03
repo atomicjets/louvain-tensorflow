@@ -10,8 +10,6 @@
 #include <unordered_map>
 #include <random>
 #include <algorithm>
-#include <glog/logging.h>
-
 namespace louvain {
 
 template<typename Info, typename MergeFn> class Graph;
@@ -93,7 +91,6 @@ public:
 			std::shuffle(std::begin(order), std::end(order), mt_);
 			while(changed > changeLimit){
 				if(max > 0 && cnt >= max){
-					LOG(WARNING) << "Exceed Limit Pass";
 					break;
 				}
 				cnt++;
