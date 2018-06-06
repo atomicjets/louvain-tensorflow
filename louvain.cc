@@ -94,8 +94,9 @@ class LouvainOp : public OpKernel {
 						vertices[m].payload().push_back(ids[m]);
 						for (int n = 0; n < ids.size(); n++) {
 							if (m != n && adj_arr(graph, ids[m], ids[n])) {
-								vertices[m].neighbors().push_back(std::pair<int,int>(n, weights_arr(graph, ids[m], ids[n])));
-								total_links += weights_arr(graph, ids[m], ids[n]);
+                                int w = weights_arr(graph, ids[m], ids[n]);
+								vertices[m].neighbors().push_back(std::pair<int,int>(n, w));
+								total_links += w;
 							}
 						}
 					}
@@ -128,7 +129,7 @@ class LouvainOp : public OpKernel {
     };
 
     // This is just a very crude approximation
-    const int64 single_cost = 10000 * output_shape[1] * output_shape[2];
+    const int64 single_cost = 100 * output_shape[1] * output_shape[2];
 
     auto worker_threads = context->device()->tensorflow_cpu_worker_threads();
     Shard(worker_threads->num_threads, worker_threads->workers, batch_size, single_cost, shard);
